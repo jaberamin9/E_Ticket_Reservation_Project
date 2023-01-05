@@ -2,30 +2,24 @@
 
 class DbOperations
 {
-
 	private $con;
 
 	function __construct()
 	{
-
 		require_once dirname(__FILE__) . '/DbConnect.php';
-
 		$db = new DbConnect();
-
 		$this->con = $db->connect();
 	}
-
-	/*CRUD -> C -> CREATE */
-
+	
 	public function createUser($username, $pass, $email)
 	{
 		if ($this->isUserExist($email)) {
 			return 0;
 		} else {
-			$stmt = $this->con->prepare("INSERT INTO `passenger` (`id`, `username`, `password`, `email`) VALUES (NULL, ?, ?, ?);");
-			$stmt->bind_param("sss", $username, $pass, $email);
+			$res = $this->con->prepare("INSERT INTO `passenger` (`id`, `username`, `password`, `email`) VALUES (NULL, ?, ?, ?);");
+			$res->bind_param("sss", $username, $pass, $email);
 
-			if ($stmt->execute()) {
+			if ($res->execute()) {
 				return 1;
 			} else {
 				return 2;
@@ -35,29 +29,29 @@ class DbOperations
 
 	public function userLogin($email, $pass)
 	{
-		$stmt = $this->con->prepare("SELECT id FROM passenger WHERE email = ? AND password = ?");
-		$stmt->bind_param("ss", $email, $pass);
-		$stmt->execute();
-		$stmt->store_result();
-		return $stmt->num_rows > 0;
+		$res = $this->con->prepare("SELECT id FROM passenger WHERE email = ? AND password = ?");
+		$res->bind_param("ss", $email, $pass);
+		$res->execute();
+		$res->store_result();
+		return $res->num_rows > 0;
 	}
 
 	public function getUserByEmail($email)
 	{
-		$stmt = $this->con->prepare("SELECT * FROM passenger WHERE email = ?");
-		$stmt->bind_param("s", $email);
-		$stmt->execute();
-		return $stmt->get_result()->fetch_assoc();
+		$res = $this->con->prepare("SELECT * FROM passenger WHERE email = ?");
+		$res->bind_param("s", $email);
+		$res->execute();
+		return $res->get_result()->fetch_assoc();
 	}
 
 
 	private function isUserExist($email)
 	{
-		$stmt = $this->con->prepare("SELECT id FROM passenger WHERE email = ?");
-		$stmt->bind_param("s", $email);
-		$stmt->execute();
-		$stmt->store_result();
-		return $stmt->num_rows > 0;
+		$res = $this->con->prepare("SELECT id FROM passenger WHERE email = ?");
+		$res->bind_param("s", $email);
+		$res->execute();
+		$res->store_result();
+		return $res->num_rows > 0;
 	}
 	public function getBusList($orderBy, $type)
 	{
