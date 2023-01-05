@@ -13,18 +13,18 @@ class DbOperationsAdmin
     }
     public function admin_login($email, $pass)
     {
-        $stmt = $this->con->prepare("SELECT id FROM admins WHERE email = ? AND password = ?");
-        $stmt->bind_param("ss", $email, $pass);
-        $stmt->execute();
-        $stmt->store_result();
-        return $stmt->num_rows > 0;
+        $res = $this->con->prepare("SELECT id FROM admins WHERE email = ? AND password = ?");
+        $res->bind_param("ss", $email, $pass);
+        $res->execute();
+        $res->store_result();
+        return $res->num_rows > 0;
     }
 
     public function AddBusAndShedual($starting_point, $ending_point, $starting_time, $arrival_time, $seat_available, $t_price, $row)
     {
-        $stmt = $this->con->prepare("INSERT INTO `bus_and_shedual` (`bus_no`, `starting_point`, `ending_point`, `starting_time`, `arrival_time`, `seat_available`, `t_price`, `row`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?);");
-        $stmt->bind_param("sssssss", $starting_point, $ending_point, $starting_time, $arrival_time, $seat_available, $t_price, $row);
-        if ($stmt->execute()) {
+        $res = $this->con->prepare("INSERT INTO `bus_and_shedual` (`bus_no`, `starting_point`, `ending_point`, `starting_time`, `arrival_time`, `seat_available`, `t_price`, `row`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?);");
+        $res->bind_param("sssssss", $starting_point, $ending_point, $starting_time, $arrival_time, $seat_available, $t_price, $row);
+        if ($res->execute()) {
             return 1;
         } else {
             return 2;
@@ -33,9 +33,9 @@ class DbOperationsAdmin
 
     public function UpdateAddBusAndShedual($bus_no, $starting_point, $ending_point, $starting_time, $arrival_time, $seat_available, $t_price, $row)
     {
-        $stmt = $this->con->prepare("UPDATE bus_and_shedual SET starting_point = ?, ending_point = ?, starting_time = ?, arrival_time = ? , seat_available = ? , t_price = ? , row = ? WHERE bus_no = $bus_no ;");
-        $stmt->bind_param("sssssss", $starting_point, $ending_point, $starting_time, $arrival_time, $seat_available, $t_price, $row);
-        if ($stmt->execute()) {
+        $res = $this->con->prepare("UPDATE bus_and_shedual SET starting_point = ?, ending_point = ?, starting_time = ?, arrival_time = ? , seat_available = ? , t_price = ? , row = ? WHERE bus_no = $bus_no ;");
+        $res->bind_param("sssssss", $starting_point, $ending_point, $starting_time, $arrival_time, $seat_available, $t_price, $row);
+        if ($res->execute()) {
             return 1;
         } else {
             return 2;
@@ -43,9 +43,9 @@ class DbOperationsAdmin
     }
     public function DeleteAddBusAndShedual($bus_no)
     {
-        $stmt = $this->con->prepare("DELETE FROM bus_and_shedual WHERE bus_no = ? ;");
-        $stmt->bind_param("s", $bus_no);
-        if ($stmt->execute()) {
+        $res = $this->con->prepare("DELETE FROM bus_and_shedual WHERE bus_no = ? ;");
+        $res->bind_param("s", $bus_no);
+        if ($res->execute()) {
             return 1;
         } else {
             return 2;
@@ -54,9 +54,9 @@ class DbOperationsAdmin
 
     public function UpdatePassenger($id, $username, $email, $password)
     {
-        $stmt = $this->con->prepare("UPDATE passenger SET username = ?, email = ?, password = ? WHERE id = $id ;");
-        $stmt->bind_param("sss", $username, $email, $password);
-        if ($stmt->execute()) {
+        $res = $this->con->prepare("UPDATE passenger SET username = ?, email = ?, password = ? WHERE id = $id ;");
+        $res->bind_param("sss", $username, $email, $password);
+        if ($res->execute()) {
             return 1;
         } else {
             return 2;
@@ -64,9 +64,9 @@ class DbOperationsAdmin
     }
     public function DeletePassenger($id)
     {
-        $stmt = $this->con->prepare("DELETE FROM passenger WHERE id = ? ;");
-        $stmt->bind_param("s", $id);
-        if ($stmt->execute()) {
+        $res = $this->con->prepare("DELETE FROM passenger WHERE id = ? ;");
+        $res->bind_param("s", $id);
+        if ($res->execute()) {
             return 1;
         } else {
             return 2;
@@ -119,9 +119,9 @@ class DbOperationsAdmin
     }
     public function updateBookedSeat($id, $bus_no, $p_id, $seat, $booked_date, $validity)
     {
-        $stmt = $this->con->prepare("UPDATE booked_seats SET bus_no = ?, p_id = ?, seat = ?, booked_date = ? , validity = ? WHERE id = $id ;");
-        $stmt->bind_param("sssss", $bus_no, $p_id, $seat, $booked_date, $validity);
-        if ($stmt->execute()) {
+        $res = $this->con->prepare("UPDATE booked_seats SET bus_no = ?, p_id = ?, seat = ?, booked_date = ? , validity = ? WHERE id = $id ;");
+        $res->bind_param("sssss", $bus_no, $p_id, $seat, $booked_date, $validity);
+        if ($res->execute()) {
             return 1;
         } else {
             return 2;
@@ -137,9 +137,9 @@ class DbOperationsAdmin
         $seat += 1;
         mysqli_query($this->con, "UPDATE `bus_and_shedual` SET `seat_available`= $seat WHERE bus_no = $bus_no");
 
-        $stmt = $this->con->prepare("DELETE FROM booked_seats WHERE id = ? ;");
-        $stmt->bind_param("s", $id);
-        if ($stmt->execute()) {
+        $res = $this->con->prepare("DELETE FROM booked_seats WHERE id = ? ;");
+        $res->bind_param("s", $id);
+        if ($res->execute()) {
             return 1;
         } else {
             return 2;
@@ -166,9 +166,9 @@ class DbOperationsAdmin
             }
         }
 
-        $stmt = $this->con->prepare("DELETE FROM booked_seats WHERE p_id = ? ;");
-        $stmt->bind_param("s", $p_id);
-        if ($stmt->execute()) {
+        $res = $this->con->prepare("DELETE FROM booked_seats WHERE p_id = ? ;");
+        $res->bind_param("s", $p_id);
+        if ($res->execute()) {
             return 1;
         } else {
             return 2;
@@ -186,8 +186,8 @@ class DbOperationsAdmin
             mysqli_query($this->con, "UPDATE `bus_and_shedual` SET `seat_available`= $seat WHERE bus_no = $bus_no");
         }
 
-        $stmt = $this->con->prepare("DELETE FROM booked_seats WHERE bus_no = ? ;");
-        $stmt->bind_param("s", $bus_no);
+        $res = $this->con->prepare("DELETE FROM booked_seats WHERE bus_no = ? ;");
+        $res->bind_param("s", $bus_no);
         if ($stmt->execute()) {
             return 1;
         } else {
